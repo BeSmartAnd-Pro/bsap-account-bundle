@@ -1,0 +1,41 @@
+{
+  "name": "besmartand-pro/bsap-account-bundle",
+  "description": "Accounting bundle.",
+  "license": "MIT",
+  "type": "symfony-bundle",
+  "keywords": [
+    "accounting",
+    "bundle",
+    "symfony"
+  ],
+  "authors": [
+    {
+      "name": "BeSmartAnd.Pro",
+      "email": "hello@BeSmartAnd.Pro",
+      "homepage": "https://BeSmartAnd.Pro"
+    }
+  ],
+  "homepage": "https://github.com/BeSmartAnd-Pro/bsap-account-bundle",
+  "require": {
+    "php": ">=8.3",
+    "lexik/jwt-authentication-bundle": "^3.1",
+    "symfony/dependency-injection": "^7.1",
+    "symfony/http-foundation": "^7.1",
+    "symfony/validator": "^7.1",
+    "symfony/http-client": "^7.1",
+    "symfony/cache": "^7.1"
+  },
+  "require-dev": {
+  },
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "BeSmartAndPro\\BsapAccountBundle\\": "src"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true
+    }
+  }
+}

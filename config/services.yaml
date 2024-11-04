@@ -1,0 +1,5 @@
+services:
+  BeSmartAndPro\BsapAccountBundle\Auth\AuthService:
+    autowire: true
+  BeSmartAndPro\BsapAccountBundle\Client\InvoiceClient:
+    autowire: true
