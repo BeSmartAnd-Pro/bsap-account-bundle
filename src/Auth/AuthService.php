@@ -6,7 +6,6 @@ namespace BeSmartAndPro\BsapAccountBundle\Auth;
 
 use DateTime;
 use Exception;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWSProvider\JWSProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -22,7 +21,6 @@ class AuthService
     public function __construct(
         protected readonly CacheInterface $cache,
         protected readonly HttpClientInterface $httpClient,
-        protected readonly JWSProviderInterface $JWSProvider,
         protected readonly string $mode,
         protected readonly string $username,
         protected readonly string $password
@@ -51,11 +49,6 @@ class AuthService
             }
 
             $date  = null;
-            $token = $this->JWSProvider->load($data['token']);
-
-            if (isset($token->getPayload()['exp'])) {
-                $date = (new DateTime)->setTimestamp($token->getPayload()['exp']);
-            }
 
             if ($date === null) {
                 $date = (new DateTime())->modify('+1 day');
