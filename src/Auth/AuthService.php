@@ -7,7 +7,6 @@ namespace BeSmartAndPro\BsapAccountBundle\Auth;
 use DateTime;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWSProvider\JWSProviderInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -24,11 +23,8 @@ class AuthService
         protected readonly CacheInterface $cache,
         protected readonly HttpClientInterface $httpClient,
         protected readonly JWSProviderInterface $JWSProvider,
-        #[Autowire(env: 'BESMARTANDPRO_KSIEGOWOSC_MODE')]
         protected readonly string $mode,
-        #[Autowire(env: 'BESMARTANDPRO_KSIEGOWOSC_USERNAME')]
         protected readonly string $username,
-        #[Autowire(env: 'BESMARTANDPRO_KSIEGOWOSC_PASSWORD')]
         protected readonly string $password
     ) {
     }

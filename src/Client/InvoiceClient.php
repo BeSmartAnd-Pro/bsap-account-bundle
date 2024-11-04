@@ -7,7 +7,6 @@ namespace BeSmartAndPro\BsapAccountBundle\Client;
 use BeSmartAndPro\BsapAccountBundle\Auth\AuthService;
 use BeSmartAndPro\BsapAccountBundle\Model\InvoiceRequest;
 use BeSmartAndPro\BsapAccountBundle\Model\InvoiceResult;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -18,7 +17,6 @@ readonly class InvoiceClient
     protected const string PROD_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/graphql';
 
     public function __construct(
-        #[Autowire(env: 'BESMARTANDPRO_KSIEGOWOSC_MODE')]
         protected string $mode,
         protected AuthService $authService,
         protected HttpClientInterface $client,
