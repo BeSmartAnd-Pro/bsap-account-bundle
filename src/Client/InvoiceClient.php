@@ -15,7 +15,7 @@ readonly class InvoiceClient
 {
     protected const string DEV_ENDPOINT  = 'http://ksiegowosc.dev.besmartand.pro/api/graphql';
     protected const string PROD_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/graphql';
-
+    
     public function __construct(
         protected string $mode,
         protected AuthService $authService,
@@ -23,12 +23,12 @@ readonly class InvoiceClient
         protected ValidatorInterface $validator
     ) {
     }
-
+    
     protected function getEndpoint(): string
     {
         return $this->mode === 'production' ? self::PROD_ENDPOINT : self::DEV_ENDPOINT;
     }
-
+    
     protected function executeQuery(string $query, array $variables = []): array
     {
         $response = $this->client->request(
@@ -46,10 +46,10 @@ readonly class InvoiceClient
                 ],
             ]
         );
-
+        
         return $response->toArray();
     }
-
+    
     public function create(InvoiceRequest $request): InvoiceResult
     {
         $query = <<<'QUERY'
@@ -65,7 +65,7 @@ readonly class InvoiceClient
             }
         }
 QUERY;
-
+        
         $result = $this->executeQuery(
             $query,
             [
@@ -99,22 +99,24 @@ QUERY;
                 ]
             ]
         );
-
+        
         return new InvoiceResult(
             $result['data']['createInvoice']['id'],
             $result['data']['createInvoice']['number'],
             base64_decode($result['data']['createInvoice']['content']),
         );
     }
-
+    
     public function download(string $id): ?InvoiceResult
     {
         $query = <<<'QUERY'
-        query getInvoice (
-            $id: ID!
+        query invoice (
+            $id: String!
          ) {
-            getInvoice(
-                id: $id
+            invoice(
+                invoice: {
+                    id: $id
+                }
             ) {
                 id,
                 number,
@@ -122,18 +124,18 @@ QUERY;
             }
         }
 QUERY;
-
+        
         $result = $this->executeQuery(
             $query,
             [
                 'id' => $id
             ]
         );
-
+        
         return new InvoiceResult(
-            $result['data']['id'],
-            $result['data']['number'],
-            base64_decode($result['data']['content']),
+            $result['data']['invoice']['id'],
+            $result['data']['invoice']['number'],
+            base64_decode($result['data']['invoice']['content']),
         );
     }
 }
