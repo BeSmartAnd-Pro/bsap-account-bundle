@@ -51,7 +51,7 @@ class AuthService
             $date  = null;
 
             if ($date === null) {
-                $date = (new DateTime())->modify('+1 day');
+                $date = (new DateTime())->modify('+59 minutes');
             }
 
             $item->expiresAt($date);
