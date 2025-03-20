@@ -75,6 +75,7 @@ QUERY;
                     ],
                     'paymentInfo'        => $request->getPaymentInfo(),
                     'shippingInfo'       => $request->getShippingInfo(),
+                    'calculateOnNetto'   => $request->isCalculateOnNetto(),
                     'paymentDate'        => $request->getPaymentDate()->format('Y-m-d'),
                     'clientBillingData'  => [
                         'firstName'   => $request->getClientBillingData()->getFirstName(),
