@@ -15,9 +15,9 @@ readonly class InvoiceRequest
         protected DateTime $paymentDate,
         protected InvoiceProfileData $clientBillingData,
         protected InvoiceProfileData $clientShippingData,
+        protected bool $calculateOnNetto,
         /** @var InvoiceLineItem[] */
         protected array $items,
-
     ) {
     }
 
@@ -45,12 +45,17 @@ readonly class InvoiceRequest
     {
         return $this->clientBillingData;
     }
+    
+    public function isCalculateOnNetto(): bool
+    {
+        return $this->calculateOnNetto;
+    }
 
     public function getClientShippingData(): InvoiceProfileData
     {
         return $this->clientShippingData;
     }
-
+    
     public function getItems(): array
     {
         $result = [];
