@@ -23,12 +23,17 @@ class AuthService
         protected readonly HttpClientInterface $httpClient,
         protected readonly string $mode,
         protected readonly string $username,
-        protected readonly string $password
+        protected readonly string $password,
+        protected ?string $alternativeHost = null
     ) {
     }
 
     protected function getEndpoint(): string
     {
+        if ($this->alternativeHost) {
+            return $this->alternativeHost . '/api/login_check';
+        }
+        
         return $this->mode === 'production' ? self::PROD_AUTH : self::DEV_AUTH;
     }
 

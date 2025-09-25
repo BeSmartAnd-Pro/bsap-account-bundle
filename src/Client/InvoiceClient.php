@@ -20,12 +20,17 @@ readonly class InvoiceClient
         protected string $mode,
         protected AuthService $authService,
         protected HttpClientInterface $client,
-        protected ValidatorInterface $validator
+        protected ValidatorInterface $validator,
+        protected ?string $alternativeHost = null
     ) {
     }
     
     protected function getEndpoint(): string
     {
+        if ($this->alternativeHost) {
+            return $this->alternativeHost . '/api/graphql';
+        }
+        
         return $this->mode === 'production' ? self::PROD_ENDPOINT : self::DEV_ENDPOINT;
     }
     

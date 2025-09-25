@@ -20,6 +20,7 @@ final class BsapAccountBundle extends AbstractBundle
             ->scalarNode('mode')->isRequired()->end()
             ->scalarNode('username')->isRequired()->end()
             ->scalarNode('password')->isRequired()->end()
+            ->scalarNode('alternativeHost')->end()
             ->end()
         ;
     }
@@ -32,16 +33,18 @@ final class BsapAccountBundle extends AbstractBundle
             ->services()
             ->get(AuthService::class)
             ->args([
-                '$mode' => $config['mode'],
-                '$username' => $config['username'],
-                '$password' => $config['password'],
+                '$mode'            => $config['mode'],
+                '$username'        => $config['username'],
+                '$password'        => $config['password'],
+                '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
         
         $container
             ->services()
             ->get(InvoiceClient::class)
             ->args([
-                '$mode' => $config['mode'],
+                '$mode'            => $config['mode'],
+                '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
     }
 }
