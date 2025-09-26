@@ -11,7 +11,8 @@ readonly class InvoiceLineItem
         protected int $quantity,
         protected float $price,
         protected string $currency,
-        protected string $taxId
+        protected string $taxId,
+        protected float $originalPrice
     ) {
     }
 
@@ -38,5 +39,10 @@ readonly class InvoiceLineItem
     public function getTaxId(): string
     {
         return $this->taxId;
+    }
+    
+    public function getOriginalPrice(): float
+    {
+        return $this->originalPrice;
     }
 }
