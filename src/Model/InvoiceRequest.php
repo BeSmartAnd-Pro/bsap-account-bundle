@@ -59,14 +59,15 @@ readonly class InvoiceRequest
     public function getItems(): array
     {
         $result = [];
-
+        
         foreach ($this->items as $item) {
             $result[] = [
-                'name'     => $item->getName(),
-                'quantity' => $item->getQuantity(),
-                'price'    => $item->getPrice(),
-                'currency' => $item->getCurrency(),
-                'tax'      => [
+                'name'          => $item->getName(),
+                'quantity'      => $item->getQuantity(),
+                'price'         => $item->getPrice(),
+                'originalPrice' => $item->getOriginalPrice(),
+                'currency'      => $item->getCurrency(),
+                'tax'           => [
                     'id' => $item->getTaxId(),
                 ]
             ];
