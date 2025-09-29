@@ -7,6 +7,7 @@ namespace BeSmartAndPro\BsapAccountBundle\Client;
 use BeSmartAndPro\BsapAccountBundle\Auth\AuthService;
 use BeSmartAndPro\BsapAccountBundle\Model\InvoiceRequest;
 use BeSmartAndPro\BsapAccountBundle\Model\InvoiceResult;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -52,7 +53,7 @@ readonly class InvoiceClient
             ]
         );
         
-        return $response->toArray();
+        return $response->toArray(false);
     }
     
     public function create(InvoiceRequest $request): InvoiceResult
@@ -105,6 +106,10 @@ QUERY;
                 ]
             ]
         );
+        
+        if (isset($result['errors'])) {
+            throw new RuntimeException($result['errors'][0]['message']);
+        }
         
         return new InvoiceResult(
             $result['data']['createInvoice']['id'],
