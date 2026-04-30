@@ -14,7 +14,7 @@ readonly class InvoiceProfileData
         protected ?string $firstName,
         protected ?string $lastName,
         protected ?string $companyName,
-        protected ?string $taxId
+        protected ?string $taxId,
     ) {
     }
 

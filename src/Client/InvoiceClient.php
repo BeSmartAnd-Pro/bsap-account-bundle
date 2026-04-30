@@ -16,7 +16,7 @@ readonly class InvoiceClient
 {
     protected const string DEV_ENDPOINT  = 'http://ksiegowosc.dev.besmartand.pro/api/graphql';
     protected const string PROD_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/graphql';
-    
+
     public function __construct(
         protected string $mode,
         protected AuthService $authService,
@@ -25,37 +25,37 @@ readonly class InvoiceClient
         protected ?string $alternativeHost = null
     ) {
     }
-    
+
     protected function getEndpoint(): string
     {
         if ($this->alternativeHost) {
             return $this->alternativeHost . '/api/graphql';
         }
-        
+
         return $this->mode === 'production' ? self::PROD_ENDPOINT : self::DEV_ENDPOINT;
     }
-    
+
     protected function executeQuery(string $query, array $variables = []): array
     {
         $response = $this->client->request(
             Request::METHOD_POST,
             $this->getEndpoint(),
             [
-                'json'    => [
-                    'query'     => $query,
+                'json' => [
+                    'query' => $query,
                     'variables' => $variables,
                 ],
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authService->getToken(),
-                    'Content-Type'  => 'application/json',
-                    'User-Agent'    => 'BSAP Account Client'
+                    'Content-Type' => 'application/json',
+                    'User-Agent' => 'BSAP Account Client',
                 ],
-            ]
+            ],
         );
-        
+
         return $response->toArray(false);
     }
-    
+
     public function create(InvoiceRequest $request): InvoiceResult
     {
         $query = <<<'QUERY'
@@ -67,57 +67,61 @@ readonly class InvoiceClient
             ) {
                 id,
                 number,
-                content
+                content,
+                ksefNumber,
+                ksefStatus,
+                ksefStatusDescription
             }
         }
 QUERY;
-        
+
         $result = $this->executeQuery(
             $query,
             [
                 'createInvoice' => [
-                    'invoicePool'        => [
-                        'id' => $request->getInvoicePoolId()
-                    ],
-                    'paymentInfo'        => $request->getPaymentInfo(),
-                    'shippingInfo'       => $request->getShippingInfo(),
-                    'calculateOnNetto'   => $request->isCalculateOnNetto(),
-                    'paymentDate'        => $request->getPaymentDate()->format('Y-m-d'),
-                    'clientBillingData'  => [
-                        'firstName'   => $request->getClientBillingData()->getFirstName(),
-                        'lastName'    => $request->getClientBillingData()->getLastName(),
+                    'paymentInfo' => $request->getPaymentInfo(),
+                    'shippingInfo' => $request->getShippingInfo(),
+                    'calculateOnNetto' => $request->isCalculateOnNetto(),
+                    'wdt' => $request->isWdt(),
+                    'paymentDate' => $request->getPaymentDate()->format('Y-m-d'),
+                    'clientBillingData' => [
+                        'firstName' => $request->getClientBillingData()->getFirstName(),
+                        'lastName' => $request->getClientBillingData()->getLastName(),
                         'companyName' => $request->getClientBillingData()->getCompanyName(),
                         'countryCode' => $request->getClientBillingData()->getCountryCode(),
-                        'street'      => $request->getClientBillingData()->getStreet(),
-                        'city'        => $request->getClientBillingData()->getCity(),
-                        'postcode'    => $request->getClientBillingData()->getPostCode(),
-                        'taxId'       => $request->getClientBillingData()->getTaxId(),
+                        'street' => $request->getClientBillingData()->getStreet(),
+                        'city' => $request->getClientBillingData()->getCity(),
+                        'postcode' => $request->getClientBillingData()->getPostCode(),
+                        'taxId' => $request->getClientBillingData()->getTaxId(),
                     ],
                     'clientShippingData' => [
-                        'firstName'   => $request->getClientShippingData()->getFirstName(),
-                        'lastName'    => $request->getClientShippingData()->getLastName(),
+                        'firstName' => $request->getClientShippingData()->getFirstName(),
+                        'lastName' => $request->getClientShippingData()->getLastName(),
                         'companyName' => $request->getClientShippingData()->getCompanyName(),
                         'countryCode' => $request->getClientShippingData()->getCountryCode(),
-                        'street'      => $request->getClientShippingData()->getStreet(),
-                        'city'        => $request->getClientShippingData()->getCity(),
-                        'postcode'    => $request->getClientShippingData()->getPostCode()
+                        'street' => $request->getClientShippingData()->getStreet(),
+                        'city' => $request->getClientShippingData()->getCity(),
+                        'postcode' => $request->getClientShippingData()->getPostCode()
                     ],
-                    'items' => $request->getItems()
-                ]
-            ]
+                    'items' => $request->getItems(),
+                ],
+            ],
         );
-        
+
         if (isset($result['errors'])) {
             throw new RuntimeException($result['errors'][0]['message']);
         }
-        
+
         return new InvoiceResult(
             $result['data']['createInvoice']['id'],
             $result['data']['createInvoice']['number'],
             base64_decode($result['data']['createInvoice']['content']),
+            $result['data']['createInvoice']['ksefNumber'] ?? null,
+            $result['data']['createInvoice']['ksefStatus'] ?? null,
+            $result['data']['createInvoice']['ksefStatusDescription'] ?? null,
         );
     }
-    
+
     public function download(string $id): ?InvoiceResult
     {
         $query = <<<'QUERY'
@@ -131,22 +135,28 @@ QUERY;
             ) {
                 id,
                 number,
-                content
+                content,
+                ksefNumber,
+                ksefStatus,
+                ksefStatusDescription
             }
         }
 QUERY;
-        
+
         $result = $this->executeQuery(
             $query,
             [
-                'id' => $id
-            ]
+                'id' => $id,
+            ],
         );
-        
+
         return new InvoiceResult(
             $result['data']['invoice']['id'],
             $result['data']['invoice']['number'],
             base64_decode($result['data']['invoice']['content']),
+            $result['data']['invoice']['ksefNumber'] ?? null,
+            $result['data']['invoice']['ksefStatus'] ?? null,
+            $result['data']['invoice']['ksefStatusDescription'] ?? null,
         );
     }
 }

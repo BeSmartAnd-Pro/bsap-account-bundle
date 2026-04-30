@@ -9,21 +9,16 @@ use DateTime;
 readonly class InvoiceRequest
 {
     public function __construct(
-        protected string $invoicePoolId,
         protected string $paymentInfo,
         protected string $shippingInfo,
         protected DateTime $paymentDate,
         protected InvoiceProfileData $clientBillingData,
         protected InvoiceProfileData $clientShippingData,
         protected bool $calculateOnNetto,
+        protected bool $wdt,
         /** @var InvoiceLineItem[] */
         protected array $items,
     ) {
-    }
-
-    public function getInvoicePoolId(): string
-    {
-        return $this->invoicePoolId;
     }
 
     public function getPaymentInfo(): string
@@ -45,31 +40,36 @@ readonly class InvoiceRequest
     {
         return $this->clientBillingData;
     }
-    
+
     public function isCalculateOnNetto(): bool
     {
         return $this->calculateOnNetto;
+    }
+
+    public function isWdt(): bool
+    {
+        return $this->wdt;
     }
 
     public function getClientShippingData(): InvoiceProfileData
     {
         return $this->clientShippingData;
     }
-    
+
     public function getItems(): array
     {
         $result = [];
-        
+
         foreach ($this->items as $item) {
             $result[] = [
-                'name'          => $item->getName(),
-                'quantity'      => $item->getQuantity(),
-                'price'         => $item->getPrice(),
+                'name' => $item->getName(),
+                'quantity' => $item->getQuantity(),
+                'price' => $item->getPrice(),
                 'originalPrice' => $item->getOriginalPrice(),
-                'currency'      => $item->getCurrency(),
-                'tax'           => [
+                'currency' => $item->getCurrency(),
+                'tax' => [
                     'id' => $item->getTaxId(),
-                ]
+                ],
             ];
         }
 

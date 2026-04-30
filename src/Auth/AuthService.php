@@ -24,7 +24,7 @@ class AuthService
         protected readonly string $mode,
         protected readonly string $username,
         protected readonly string $password,
-        protected ?string $alternativeHost = null
+        protected ?string $alternativeHost = null,
     ) {
     }
 
@@ -33,7 +33,7 @@ class AuthService
         if ($this->alternativeHost) {
             return $this->alternativeHost . '/api/login_check';
         }
-        
+
         return $this->mode === 'production' ? self::PROD_AUTH : self::DEV_AUTH;
     }
 

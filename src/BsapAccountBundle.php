@@ -28,22 +28,22 @@ final class BsapAccountBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');
-        
+
         $container
             ->services()
             ->get(AuthService::class)
             ->args([
-                '$mode'            => $config['mode'],
-                '$username'        => $config['username'],
-                '$password'        => $config['password'],
+                '$mode' => $config['mode'],
+                '$username' => $config['username'],
+                '$password' => $config['password'],
                 '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
-        
+
         $container
             ->services()
             ->get(InvoiceClient::class)
             ->args([
-                '$mode'            => $config['mode'],
+                '$mode' => $config['mode'],
                 '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
     }

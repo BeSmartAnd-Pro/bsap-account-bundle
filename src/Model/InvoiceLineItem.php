@@ -12,7 +12,7 @@ readonly class InvoiceLineItem
         protected float $price,
         protected string $currency,
         protected string $taxId,
-        protected float $originalPrice
+        protected float $originalPrice,
     ) {
     }
 
@@ -40,7 +40,7 @@ readonly class InvoiceLineItem
     {
         return $this->taxId;
     }
-    
+
     public function getOriginalPrice(): float
     {
         return $this->originalPrice;
