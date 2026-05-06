@@ -67,9 +67,7 @@ readonly class InvoiceRequest
                 'price' => $item->getPrice(),
                 'originalPrice' => $item->getOriginalPrice(),
                 'currency' => $item->getCurrency(),
-                'tax' => [
-                    'id' => $item->getTaxId(),
-                ],
+                'taxRate' => $item->getTaxRate(),
             ];
         }
 
