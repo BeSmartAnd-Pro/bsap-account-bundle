@@ -18,6 +18,9 @@ readonly class InvoiceRequest
         protected bool $wdt,
         /** @var InvoiceLineItem[] */
         protected array $items,
+        protected string $type = 'default',
+        protected ?string $parentInvoiceId = null,
+        protected ?string $additionalContent = null,
     ) {
     }
 
@@ -54,6 +57,21 @@ readonly class InvoiceRequest
     public function getClientShippingData(): InvoiceProfileData
     {
         return $this->clientShippingData;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getParentInvoiceId(): ?string
+    {
+        return $this->parentInvoiceId;
+    }
+
+    public function getAdditionalContent(): ?string
+    {
+        return $this->additionalContent;
     }
 
     public function getItems(): array

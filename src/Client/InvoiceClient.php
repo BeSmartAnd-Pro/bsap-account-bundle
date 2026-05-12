@@ -70,7 +70,10 @@ readonly class InvoiceClient
                 content,
                 ksefNumber,
                 ksefStatus,
-                ksefStatusDescription
+                ksefStatusDescription,
+                type,
+                parentInvoiceId,
+                correction
             }
         }
 QUERY;
@@ -83,6 +86,9 @@ QUERY;
                     'shippingInfo' => $request->getShippingInfo(),
                     'calculateOnNetto' => $request->isCalculateOnNetto(),
                     'wdt' => $request->isWdt(),
+                    'type' => $request->getType(),
+                    'parentInvoiceId' => $request->getParentInvoiceId(),
+                    'additionalContent' => $request->getAdditionalContent(),
                     'paymentDate' => $request->getPaymentDate()->format('Y-m-d'),
                     'clientBillingData' => [
                         'firstName' => $request->getClientBillingData()->getFirstName(),
@@ -119,6 +125,9 @@ QUERY;
             $result['data']['createInvoice']['ksefNumber'] ?? null,
             $result['data']['createInvoice']['ksefStatus'] ?? null,
             $result['data']['createInvoice']['ksefStatusDescription'] ?? null,
+            $result['data']['createInvoice']['type'] ?? 'default',
+            $result['data']['createInvoice']['parentInvoiceId'] ?? null,
+            $result['data']['createInvoice']['correction'] ?? false,
         );
     }
 
@@ -138,7 +147,10 @@ QUERY;
                 content,
                 ksefNumber,
                 ksefStatus,
-                ksefStatusDescription
+                ksefStatusDescription,
+                type,
+                parentInvoiceId,
+                correction
             }
         }
 QUERY;
@@ -157,6 +169,9 @@ QUERY;
             $result['data']['invoice']['ksefNumber'] ?? null,
             $result['data']['invoice']['ksefStatus'] ?? null,
             $result['data']['invoice']['ksefStatusDescription'] ?? null,
+            $result['data']['invoice']['type'] ?? 'default',
+            $result['data']['invoice']['parentInvoiceId'] ?? null,
+            $result['data']['invoice']['correction'] ?? false,
         );
     }
 }

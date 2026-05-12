@@ -13,6 +13,9 @@ readonly class InvoiceResult
         protected ?string $ksefNumber = null,
         protected ?string $ksefStatus = null,
         protected ?string $ksefStatusDescription = null,
+        protected string $type = 'default',
+        protected ?string $parentInvoiceId = null,
+        protected bool $correction = false,
     ) {
     }
 
@@ -44,5 +47,20 @@ readonly class InvoiceResult
     public function getKsefStatusDescription(): ?string
     {
         return $this->ksefStatusDescription;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getParentInvoiceId(): ?string
+    {
+        return $this->parentInvoiceId;
+    }
+
+    public function isCorrection(): bool
+    {
+        return $this->correction;
     }
 }
