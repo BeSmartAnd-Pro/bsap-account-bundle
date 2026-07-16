@@ -12,17 +12,79 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @phpstan-type InvoiceLineItem array{
+ *     name: string,
+ *     quantity: int|float,
+ *     price: int|float,
+ *     originalPrice: int|float,
+ *     currency: string,
+ *     taxRate: int|float
+ * }
+ * @phpstan-type InvoiceBillingData array{
+ *     firstName: string|null,
+ *     lastName: string|null,
+ *     companyName: string|null,
+ *     countryCode: string,
+ *     street: string,
+ *     city: string,
+ *     postcode: string,
+ *     taxId: string|null
+ * }
+ * @phpstan-type InvoiceShippingData array{
+ *     firstName: string|null,
+ *     lastName: string|null,
+ *     companyName: string|null,
+ *     countryCode: string,
+ *     street: string,
+ *     city: string,
+ *     postcode: string
+ * }
+ * @phpstan-type CreateInvoiceVariables array{
+ *     createInvoice: array{
+ *         paymentInfo: string,
+ *         shippingInfo: string,
+ *         calculateOnNetto: bool,
+ *         wdt: bool,
+ *         vatRr: bool,
+ *         type: string,
+ *         parentInvoiceId: string|null,
+ *         additionalContent: string|null,
+ *         paymentDate: string,
+ *         clientBillingData: InvoiceBillingData,
+ *         clientShippingData: InvoiceShippingData,
+ *         items: array<int, InvoiceLineItem>
+ *     }
+ * }
+ * @phpstan-type DownloadInvoiceVariables array{id: string}
+ * @phpstan-type InvoiceData array{
+ *     id: string,
+ *     number: string,
+ *     content: string,
+ *     ksefNumber?: string|null,
+ *     ksefStatus?: string|null,
+ *     ksefStatusDescription?: string|null,
+ *     type?: string|null,
+ *     parentInvoiceId?: string|null,
+ *     correction?: bool|null
+ * }
+ * @phpstan-type ExecuteQueryResult array{
+ *     data: array{
+ *         createInvoice?: InvoiceData,
+ *         invoice?: InvoiceData
+ *     },
+ *     errors?: array<int, array{message: string}>
+ * }
+ */
 readonly class InvoiceClient
 {
-    protected const string DEV_ENDPOINT  = 'http://ksiegowosc.dev.besmartand.pro/api/graphql';
-    protected const string PROD_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/graphql';
+    protected const string DEFAULT_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/graphql';
 
     public function __construct(
-        protected string $mode,
         protected AuthService $authService,
         protected HttpClientInterface $client,
         protected ValidatorInterface $validator,
-        protected ?string $alternativeHost = null
+        protected ?string $alternativeHost = null,
     ) {
     }
 
@@ -32,9 +94,15 @@ readonly class InvoiceClient
             return $this->alternativeHost . '/api/graphql';
         }
 
-        return $this->mode === 'production' ? self::PROD_ENDPOINT : self::DEV_ENDPOINT;
+        return self::DEFAULT_ENDPOINT;
     }
 
+    /**
+     * @param array<string, array<string, array<string, string|null>|array<int, array<string, int|float|string>>|bool|string|null>|string> $variables
+     * @phpstan-param CreateInvoiceVariables|DownloadInvoiceVariables|array{} $variables
+     * @return array<string, array<string, array<string, bool|string|null>>|array<int, array{message: string}>>
+     * @phpstan-return ExecuteQueryResult
+     */
     protected function executeQuery(string $query, array $variables = []): array
     {
         $response = $this->client->request(
@@ -53,10 +121,23 @@ readonly class InvoiceClient
             ],
         );
 
-        return $response->toArray(false);
+        /** @var ExecuteQueryResult $result */
+        $result = $response->toArray(false);
+
+        return $result;
     }
 
     public function create(InvoiceRequest $request): InvoiceResult
+    {
+        return $this->createInvoice($request, false);
+    }
+
+    public function createVatRr(InvoiceRequest $request): InvoiceResult
+    {
+        return $this->createInvoice($request, true);
+    }
+
+    private function createInvoice(InvoiceRequest $request, bool $vatRr): InvoiceResult
     {
         $query = <<<'QUERY'
         mutation createInvoice (
@@ -86,6 +167,7 @@ QUERY;
                     'shippingInfo' => $request->getShippingInfo(),
                     'calculateOnNetto' => $request->isCalculateOnNetto(),
                     'wdt' => $request->isWdt(),
+                    'vatRr' => $vatRr,
                     'type' => $request->getType(),
                     'parentInvoiceId' => $request->getParentInvoiceId(),
                     'additionalContent' => $request->getAdditionalContent(),
@@ -107,7 +189,7 @@ QUERY;
                         'countryCode' => $request->getClientShippingData()->getCountryCode(),
                         'street' => $request->getClientShippingData()->getStreet(),
                         'city' => $request->getClientShippingData()->getCity(),
-                        'postcode' => $request->getClientShippingData()->getPostCode()
+                        'postcode' => $request->getClientShippingData()->getPostCode(),
                     ],
                     'items' => $request->getItems(),
                 ],
@@ -118,16 +200,24 @@ QUERY;
             throw new RuntimeException($result['errors'][0]['message']);
         }
 
+        return $this->createInvoiceResult($result['data']['createInvoice']);
+    }
+
+    /**
+     * @param array{id: string, number: string, content: string, ksefNumber?: string|null, ksefStatus?: string|null, ksefStatusDescription?: string|null, type?: string|null, parentInvoiceId?: string|null, correction?: bool|null} $invoiceData
+     */
+    private function createInvoiceResult(array $invoiceData): InvoiceResult
+    {
         return new InvoiceResult(
-            $result['data']['createInvoice']['id'],
-            $result['data']['createInvoice']['number'],
-            base64_decode($result['data']['createInvoice']['content']),
-            $result['data']['createInvoice']['ksefNumber'] ?? null,
-            $result['data']['createInvoice']['ksefStatus'] ?? null,
-            $result['data']['createInvoice']['ksefStatusDescription'] ?? null,
-            $result['data']['createInvoice']['type'] ?? 'default',
-            $result['data']['createInvoice']['parentInvoiceId'] ?? null,
-            $result['data']['createInvoice']['correction'] ?? false,
+            $invoiceData['id'],
+            $invoiceData['number'],
+            base64_decode($invoiceData['content']),
+            $invoiceData['ksefNumber'] ?? null,
+            $invoiceData['ksefStatus'] ?? null,
+            $invoiceData['ksefStatusDescription'] ?? null,
+            $invoiceData['type'] ?? 'default',
+            $invoiceData['parentInvoiceId'] ?? null,
+            $invoiceData['correction'] ?? false,
         );
     }
 
@@ -162,16 +252,6 @@ QUERY;
             ],
         );
 
-        return new InvoiceResult(
-            $result['data']['invoice']['id'],
-            $result['data']['invoice']['number'],
-            base64_decode($result['data']['invoice']['content']),
-            $result['data']['invoice']['ksefNumber'] ?? null,
-            $result['data']['invoice']['ksefStatus'] ?? null,
-            $result['data']['invoice']['ksefStatusDescription'] ?? null,
-            $result['data']['invoice']['type'] ?? 'default',
-            $result['data']['invoice']['parentInvoiceId'] ?? null,
-            $result['data']['invoice']['correction'] ?? false,
-        );
+        return $this->createInvoiceResult($result['data']['invoice']);
     }
 }

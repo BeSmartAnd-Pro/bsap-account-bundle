@@ -74,6 +74,16 @@ readonly class InvoiceRequest
         return $this->additionalContent;
     }
 
+    /**
+     * @return array<int, array{
+     *     name: string,
+     *     quantity: int|float,
+     *     price: int|float,
+     *     originalPrice: int|float,
+     *     currency: string,
+     *     taxRate: int|float
+     * }>
+     */
     public function getItems(): array
     {
         $result = [];

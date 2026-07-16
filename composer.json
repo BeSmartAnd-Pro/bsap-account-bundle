@@ -18,13 +18,16 @@
   "homepage": "https://github.com/BeSmartAnd-Pro/bsap-account-bundle",
   "require": {
     "php": ">=8.3",
+    "symfony/config": "^7.1",
     "symfony/dependency-injection": "^7.1",
+    "symfony/http-kernel": "^7.1",
     "symfony/http-foundation": "^7.1",
     "symfony/validator": "^7.1",
     "symfony/http-client": "^7.1",
     "symfony/cache": "^7.1"
   },
   "require-dev": {
+    "besmartand-pro/php-quality-config": "dev-main"
   },
   "prefer-stable": true,
   "autoload": {
@@ -32,9 +35,18 @@
       "BeSmartAndPro\\BsapAccountBundle\\": "src"
     }
   },
+  "scripts": {
+    "phpcs": "php -d memory_limit=4G ./vendor/bin/phpcs --standard=vendor/besmartand-pro/php-quality-config/phpcs/phpcs.xml --cache=.phpcs_cache -p src",
+    "phpstan": "php -d memory_limit=4G ./vendor/bin/phpstan analyse -c vendor/besmartand-pro/php-quality-config/phpstan/base.neon src",
+    "qa": [
+      "@phpcs",
+      "@phpstan"
+    ]
+  },
   "config": {
     "allow-plugins": {
-      "ergebnis/composer-normalize": true
+      "ergebnis/composer-normalize": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }

@@ -17,14 +17,16 @@ final class BsapAccountBundle extends AbstractBundle
     {
         $definition->rootNode()
             ->children()
-            ->scalarNode('mode')->isRequired()->end()
             ->scalarNode('username')->isRequired()->end()
             ->scalarNode('password')->isRequired()->end()
             ->scalarNode('alternativeHost')->end()
             ->end()
         ;
     }
-    
+
+    /**
+     * @param array{username: string, password: string, alternativeHost?: string|null} $config
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');
@@ -33,7 +35,6 @@ final class BsapAccountBundle extends AbstractBundle
             ->services()
             ->get(AuthService::class)
             ->args([
-                '$mode' => $config['mode'],
                 '$username' => $config['username'],
                 '$password' => $config['password'],
                 '$alternativeHost' => $config['alternativeHost'] ?? null,
@@ -43,7 +44,6 @@ final class BsapAccountBundle extends AbstractBundle
             ->services()
             ->get(InvoiceClient::class)
             ->args([
-                '$mode' => $config['mode'],
                 '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
     }

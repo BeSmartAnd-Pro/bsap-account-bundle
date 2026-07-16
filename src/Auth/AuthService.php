@@ -13,15 +13,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AuthService
 {
-    protected const string DEV_AUTH  = 'http://ksiegowosc.dev.besmartand.pro/api/login_check';
-    protected const string PROD_AUTH = 'https://ksiegowosc.besmartand.pro/api/login_check';
+    protected const string DEFAULT_AUTH_ENDPOINT = 'https://ksiegowosc.besmartand.pro/api/login_check';
 
     protected const string CACHE_TOKEN_KEY = 'besmartandpro_ksiegowosc_token';
 
     public function __construct(
         protected readonly CacheInterface $cache,
         protected readonly HttpClientInterface $httpClient,
-        protected readonly string $mode,
         protected readonly string $username,
         protected readonly string $password,
         protected ?string $alternativeHost = null,
@@ -34,7 +32,7 @@ class AuthService
             return $this->alternativeHost . '/api/login_check';
         }
 
-        return $this->mode === 'production' ? self::PROD_AUTH : self::DEV_AUTH;
+        return self::DEFAULT_AUTH_ENDPOINT;
     }
 
     public function getToken(): string
@@ -53,13 +51,7 @@ class AuthService
                 throw new Exception('Security problem, can`t fetch token');
             }
 
-            $date  = null;
-
-            if ($date === null) {
-                $date = (new DateTime())->modify('+59 minutes');
-            }
-
-            $item->expiresAt($date);
+            $item->expiresAt((new DateTime())->modify('+59 minutes'));
 
             return $data['token'];
         });
