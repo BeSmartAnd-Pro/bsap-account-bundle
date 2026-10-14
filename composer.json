@@ -27,7 +27,7 @@
     "symfony/cache": "^7.1"
   },
   "require-dev": {
-    "besmartand-pro/php-quality-config": "dev-main"
+    "besmartand-pro/php-quality-config": "^1.1"
   },
   "prefer-stable": true,
   "autoload": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "083d413bbd532492dd31ed72943daa2f",
+    "content-hash": "06a713a9249dedb1c71b721ee070eae9",
     "packages": [
         {
             "name": "psr/cache",
@@ -2190,21 +2190,21 @@
     "packages-dev": [
         {
             "name": "besmartand-pro/php-quality-config",
-            "version": "dev-main",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BeSmartAnd-Pro/php-quality-config.git",
-                "reference": "900836b112c01cdd77fcc0e5e782c99023946b32"
+                "reference": "b7cb63f3be52f0ecf112329e1601c7733e706c18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BeSmartAnd-Pro/php-quality-config/zipball/900836b112c01cdd77fcc0e5e782c99023946b32",
-                "reference": "900836b112c01cdd77fcc0e5e782c99023946b32",
+                "url": "https://api.github.com/repos/BeSmartAnd-Pro/php-quality-config/zipball/b7cb63f3be52f0ecf112329e1601c7733e706c18",
+                "reference": "b7cb63f3be52f0ecf112329e1601c7733e706c18",
                 "shasum": ""
             },
             "require": {
                 "friendsoftwig/twigcs": "^6.0",
-                "php": ">=8.2",
+                "php": ">=8.4",
                 "php-parallel-lint/php-console-highlighter": "^1.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpcompatibility/php-compatibility": "^9.3",
@@ -2214,10 +2214,8 @@
                 "slevomat/coding-standard": "^8.22.1",
                 "spaze/phpstan-disallowed-calls": "^4.8",
                 "squizlabs/php_codesniffer": "^3.13.5",
-                "symplify/phpstan-extensions": "^12.0.2",
-                "symplify/phpstan-rules": "^14.9.11"
+                "symplify/phpstan-rules": "^14.13.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": []
@@ -2229,9 +2227,9 @@
             "description": "Shared PHPCS and PHPStan configs for BeSmartAnd.Pro projects",
             "support": {
                 "issues": "https://github.com/BeSmartAnd-Pro/php-quality-config/issues",
-                "source": "https://github.com/BeSmartAnd-Pro/php-quality-config/tree/main"
+                "source": "https://github.com/BeSmartAnd-Pro/php-quality-config/tree/v1.1.0"
             },
-            "time": "2026-03-02T14:57:19+00:00"
+            "time": "2026-10-08T12:53:14+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -3095,16 +3093,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.5",
+            "version": "3.13.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4"
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
                 "shasum": ""
             },
             "require": {
@@ -3170,7 +3168,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-04T16:30:35+00:00"
+            "time": "2026-08-06T00:17:32+00:00"
         },
         {
             "name": "symfony/console",
@@ -3588,74 +3586,17 @@
             "time": "2026-05-29T05:06:50+00:00"
         },
         {
-            "name": "symplify/phpstan-extensions",
-            "version": "12.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symplify/phpstan-extensions.git",
-                "reference": "5ce15cb084eb3bc7f92b77020c59ff3d318746d5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symplify/phpstan-extensions/zipball/5ce15cb084eb3bc7f92b77020c59ff3d318746d5",
-                "reference": "5ce15cb084eb3bc7f92b77020c59ff3d318746d5",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4 || ^8.0",
-                "phpstan/phpstan": "^2.0"
-            },
-            "type": "phpstan-extension",
-            "extra": {
-                "phpstan": {
-                    "includes": [
-                        "config/config.neon"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symplify\\PHPStanExtensions\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Pre-escaped error messages in 'symplify' error format, container aware test case and other useful extensions for PHPStan",
-            "keywords": [
-                "phpstan-extension",
-                "static analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/symplify/phpstan-extensions/issues",
-                "source": "https://github.com/symplify/phpstan-extensions/tree/12.0.2"
-            },
-            "funding": [
-                {
-                    "url": "https://www.paypal.me/rectorphp",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "abandoned": "symplify/phpstan-rules",
-            "time": "2025-11-12T16:46:04+00:00"
-        },
-        {
             "name": "symplify/phpstan-rules",
-            "version": "14.12.0",
+            "version": "14.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/phpstan-rules.git",
-                "reference": "31242401e8498c9418a14189e48b2b53158d3f7b"
+                "reference": "31b31b0160aac4c9d86815a1e19c00c2c88f302e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/phpstan-rules/zipball/31242401e8498c9418a14189e48b2b53158d3f7b",
-                "reference": "31242401e8498c9418a14189e48b2b53158d3f7b",
+                "url": "https://api.github.com/repos/symplify/phpstan-rules/zipball/31b31b0160aac4c9d86815a1e19c00c2c88f302e",
+                "reference": "31b31b0160aac4c9d86815a1e19c00c2c88f302e",
                 "shasum": ""
             },
             "require": {
@@ -3667,6 +3608,7 @@
             },
             "require-dev": {
                 "illuminate/container": "^11.51",
+                "nette/neon": "^3.4",
                 "nikic/php-parser": "^5.7",
                 "phpstan/extension-installer": "^1.4",
                 "phpunit/phpunit": "^13.2",
@@ -3705,7 +3647,7 @@
             "description": "Set of Symplify rules, type extensions and error formatter for PHPStan",
             "support": {
                 "issues": "https://github.com/symplify/phpstan-rules/issues",
-                "source": "https://github.com/symplify/phpstan-rules/tree/14.12.0"
+                "source": "https://github.com/symplify/phpstan-rules/tree/14.13.1"
             },
             "funding": [
                 {
@@ -3717,7 +3659,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-15T08:34:08+00:00"
+            "time": "2026-08-29T17:45:22+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -3788,14 +3730,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "besmartand-pro/php-quality-config": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.3"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
