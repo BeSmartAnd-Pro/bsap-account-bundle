@@ -51,7 +51,7 @@ class AuthService
                 throw new Exception('Security problem, can`t fetch token');
             }
 
-            $item->expiresAt((new DateTime())->modify('+59 minutes'));
+            $item->expiresAt(new DateTime()->modify('+59 minutes'));
 
             return $data['token'];
         });
