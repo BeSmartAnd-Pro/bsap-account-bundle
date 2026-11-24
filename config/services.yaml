@@ -3,3 +3,5 @@ services:
     autowire: true
   BeSmartAndPro\BsapAccountBundle\Client\InvoiceClient:
     autowire: true
+  BeSmartAndPro\BsapAccountBundle\Client\PaymentClient:
+    autowire: true

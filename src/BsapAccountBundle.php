@@ -6,6 +6,7 @@ namespace BeSmartAndPro\BsapAccountBundle;
 
 use BeSmartAndPro\BsapAccountBundle\Auth\AuthService;
 use BeSmartAndPro\BsapAccountBundle\Client\InvoiceClient;
+use BeSmartAndPro\BsapAccountBundle\Client\PaymentClient;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -43,6 +44,13 @@ final class BsapAccountBundle extends AbstractBundle
         $container
             ->services()
             ->get(InvoiceClient::class)
+            ->args([
+                '$alternativeHost' => $config['alternativeHost'] ?? null,
+            ]);
+
+        $container
+            ->services()
+            ->get(PaymentClient::class)
             ->args([
                 '$alternativeHost' => $config['alternativeHost'] ?? null,
             ]);
